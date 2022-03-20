@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+    <classes>
+      <class name="com.technocredits.orghrm.testscripts.FirstTest"/>
+      <class name="com.technocredits.orghrm.testscripts.TestExample2"/>
+      <class name="com.technocredits.orghrm.testscripts.Example1"/>
+      <class name="com.technocredits.orghrm.testscripts.MyTestExample"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
