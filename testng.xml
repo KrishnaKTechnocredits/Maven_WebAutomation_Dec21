@@ -4,9 +4,9 @@
   <test thread-count="5" name="Test">
     <classes>
       <class name="testscripts.WidgetsTest"/>
-      <class name="testscripts.SkillTest"/>
+<!--       <class name="testscripts.SkillTest"/>
       <class name="testscripts.ProfileTest"/>
-      <class name="testscripts.LoginTest"/>
+      <class name="testscripts.LoginTest"/> -->
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
