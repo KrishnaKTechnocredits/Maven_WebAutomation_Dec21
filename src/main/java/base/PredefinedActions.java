@@ -10,6 +10,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -24,46 +25,58 @@ public class PredefinedActions {
 	static public void start() {
 		start("http://automationdec21-trials7401.orangehrmlive.com/");
 	}
-	
+
 	static public void start(String url) {
 		System.out.println("STEP - Launch Chrome Browser");
-		//System.setProperty(ConstantPath.CHROMEDRIVERKEY, ConstantPath.CHROMEDRIVERVALUE);
-		//WebDriverManager.chromedriver().driverVersion("99.0.4844.74").setup();
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		wait = new WebDriverWait(driver, ConstantPath.WAITTIMEOUT);
+		// System.setProperty(ConstantPath.CHROMEDRIVERKEY,
+		// ConstantPath.CHROMEDRIVERVALUE);
+		// WebDriverManager.chromedriver().driverVersion("99.0.4844.74").setup();
 
+		String browser = System.getProperty("browserName");
+		switch (browser.toLowerCase()) {
+		case "chrome":
+			WebDriverManager.chromedriver().setup();
+			driver = new ChromeDriver();
+			break;
+		case "firefox":
+			WebDriverManager.firefoxdriver().setup();
+			driver = new FirefoxDriver();
+			break;
+		default:
+			break;
+		}
+
+		wait = new WebDriverWait(driver, ConstantPath.WAITTIMEOUT);
 		System.out.println("STEP - Browser Maximized");
 		driver.manage().window().maximize();
 		System.out.println("STEP - Load URL in browser");
 		driver.get(url);
 	}
-	
-	/*static public void start(String url, String browser) {
-		System.out.println("STEP - Launch Chrome Browser");
-		System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
-		driver = new ChromeDriver();
-		wait = new WebDriverWait(driver, 30);
-		// driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-		System.out.println("STEP - Browser Maximized");
-		driver.manage().window().maximize();
-		System.out.println("STEP - Load URL in browser");
-		driver.get("http://automationdec21-trials7401.orangehrmlive.com/");
-	}*/
+	/*
+	 * static public void start(String url, String browser) {
+	 * System.out.println("STEP - Launch Chrome Browser");
+	 * System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
+	 * driver = new ChromeDriver(); wait = new WebDriverWait(driver, 30); //
+	 * driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	 * 
+	 * System.out.println("STEP - Browser Maximized");
+	 * driver.manage().window().maximize();
+	 * System.out.println("STEP - Load URL in browser");
+	 * driver.get("http://automationdec21-trials7401.orangehrmlive.com/"); }
+	 */
 
 	// xpath:-//div[contains(@class,'organization-logo')]/child::img
 	// orglogo=[id]:-organization-logo
 
-	/*protected WebElement getElement(By by, boolean isWaitRequired) {
-		WebElement element;
-		if (isWaitRequired)
-			element = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-		else
-			element = driver.findElement(by);
-
-		return null;
-	}*/
+	/*
+	 * protected WebElement getElement(By by, boolean isWaitRequired) { WebElement
+	 * element; if (isWaitRequired) element =
+	 * wait.until(ExpectedConditions.visibilityOfElementLocated(by)); else element =
+	 * driver.findElement(by);
+	 * 
+	 * return null; }
+	 */
 
 	protected WebElement getElement(String locator, boolean isWaitRequired) {
 		WebElement element = null;
@@ -75,41 +88,38 @@ public class PredefinedActions {
 
 		return element;
 	}
-	
-	
-	public enum WaitType{
-			FASTWAIT(ConstantPath.FASTWAIT),
-			WAIT(ConstantPath.WAIT),
-			LONGWAIT(ConstantPath.LONGWAIT);
-			
-			public final int waitTime;
-			private WaitType(int waitTime) {
-				this.waitTime = waitTime;
-			}
+
+	public enum WaitType {
+		FASTWAIT(ConstantPath.FASTWAIT), WAIT(ConstantPath.WAIT), LONGWAIT(ConstantPath.LONGWAIT);
+
+		public final int waitTime;
+
+		private WaitType(int waitTime) {
+			this.waitTime = waitTime;
+		}
 	}
-	
+
 	protected boolean waitForvisibilityOfElement(String locator, WaitType waitType) {
 		WebDriverWait wait = new WebDriverWait(driver, waitType.waitTime);
 		By by = getLocatorBy(locator);
 		try {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 			return true;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
+
 	protected boolean inVisibilityOfElement(String locator) {
 		By by = getLocatorBy(locator);
 		return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
 	}
-	
 
 	protected Alert waitUntilAlertToBePresent(String locator) {
 		By by = getLocatorBy(locator);
 		return wait.until(ExpectedConditions.alertIsPresent());
 	}
-	
+
 	protected boolean waitUntilPageTitleToBe(String title) {
 		boolean titleFlag = wait.until(ExpectedConditions.titleIs(title));
 		return titleFlag;
@@ -118,110 +128,110 @@ public class PredefinedActions {
 	protected boolean isElementDisplayed(String locator, boolean isWaitRequired) {
 		try {
 			WebElement element = getElement(locator, isWaitRequired);
-			if(element.isDisplayed()) {
+			if (element.isDisplayed()) {
 				return true;
-			}else {
-				//TODO : call a method ScrollToElement
+			} else {
+				// TODO : call a method ScrollToElement
 				return element.isDisplayed();
 			}
-		}catch(NoSuchElementException ne) {
+		} catch (NoSuchElementException ne) {
 			return false;
 		}
-		
+
 	}
-	
+
 	protected List<WebElement> waitUntilNumberOfElementsToBeMoreThan(String locator, int count) {
 		List<WebElement> widgetList;
 		By by = getLocatorBy(locator);
 		widgetList = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(by, count));
 		return widgetList;
 	}
-	
+
 	private By getLocatorBy(String locator) {
 		String locators[] = locator.split("]:-"); // [id ... organization-logo
 		String locatorType = locators[0].replace("[", "").toUpperCase(); // id
 		String locatorValue = locators[1];
-		
-		switch(locatorType) {
-			case "XPATH" : 
-				return By.xpath(locatorValue);
-			
-			case "ID" :
-				return By.id(locatorValue);
-				
-			case "NAME" :
-				return By.name(locatorValue);
-			
-			case "CSS":
-				return By.cssSelector(locatorValue);
-				
-			default:
-				throw new InvalidLocatorType(
-						locatorType + " is not valid, please select locatortype from ID, XPATH, NAME, CSS, CLASSNAME");	
+
+		switch (locatorType) {
+		case "XPATH":
+			return By.xpath(locatorValue);
+
+		case "ID":
+			return By.id(locatorValue);
+
+		case "NAME":
+			return By.name(locatorValue);
+
+		case "CSS":
+			return By.cssSelector(locatorValue);
+
+		default:
+			throw new InvalidLocatorType(
+					locatorType + " is not valid, please select locatortype from ID, XPATH, NAME, CSS, CLASSNAME");
 		}
 	}
-	
+
 	public String getElementText(String locator, boolean isWaitRequired) {
 		WebElement element = getElement(locator, isWaitRequired);
 		return element.getText();
 	}
-	
+
 	public String getElementText(WebElement element) {
 		return element.getText();
 	}
-	
+
 	public String getElementAttribute(String locator, String attribute, boolean isWaitRequied) {
 		WebElement element = getElement(locator, isWaitRequied);
 		String attrValue = element.getAttribute(attribute);
 		return attrValue;
 	}
-	
+
 	public String getElementAttribute(WebElement element, String attribute) {
 		String attrValue = element.getAttribute(attribute);
 		return attrValue;
 	}
-	
+
 	public void setText(String locator, boolean isWaitRequired, String text) {
 		WebElement element = getElement(locator, isWaitRequired);
-		if(element.isEnabled()) {
+		if (element.isEnabled()) {
 			element.clear();
 			element.sendKeys(text);
-		}else {
+		} else {
 			System.out.println(locator + " element is not enabled");
-		}	
+		}
 	}
-	
+
 	public boolean waitUntilElementIsClickable(WebElement element) {
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(element));
 			return true;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
 
 	public void clickOnElement(String locator, boolean isWaitRequired) {
 		WebElement element = getElement(locator, isWaitRequired);
-		if(waitUntilElementIsClickable(element)) {
+		if (waitUntilElementIsClickable(element)) {
 			element.click();
-		}else {
+		} else {
 			throw new ElementNotInteractableException(locator + " is not clickable");
 		}
 	}
-	
-	protected List<WebElement> getAllElements(String locator, boolean isWaitRequired){
+
+	protected List<WebElement> getAllElements(String locator, boolean isWaitRequired) {
 		By by = getLocatorBy(locator);
 		return driver.findElements(by);
 	}
-	
-	protected List<String> getAllElementsText(List<WebElement> listOfElement){
+
+	protected List<String> getAllElementsText(List<WebElement> listOfElement) {
 		List<String> listOfElementText = new ArrayList<String>();
-		for(WebElement element : listOfElement) {
+		for (WebElement element : listOfElement) {
 			listOfElementText.add(element.getText());
 		}
 		return listOfElementText;
 	}
-	
+
 	public static void closeBrower() {
 		driver.close();
 	}
