@@ -8,5 +8,5 @@
       <class name="testscripts.ProfileTest"/>
       <class name="testscripts.LoginTest"/> -->
     </classes>
-  </test> <!-- Test -->
-</suite> <!-- Suite -->
+  </test>
+</suite> 
