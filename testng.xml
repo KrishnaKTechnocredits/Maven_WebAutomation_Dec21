@@ -9,4 +9,4 @@
       <class name="testscripts.LoginTest"/> -->
     </classes>
   </test> <!-- Test -->
-</suite> <!-- Suite -->
+</suite>
